@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/Login'
-import Dashboard from '@/components/Dashboard'
-import List from '@/components/List'
-import Report from '@/components/Report'
+
+import Login from '../pages/Login'
+import Dashboard from '@/pages/Dashboard'
+import User from '@/pages/User'
+import Usermanage from '@/pages/Usermanage'
+import Adduser from '@/pages/Adduser'
+import Recordmanage from '@/pages/Recordmanage'
 
 Vue.use(Router)
 
@@ -11,23 +14,33 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Login',
       component: Login
     },
     {
-      path: '/user/dashboard',
-      name: 'Dashboard',
-      component: Dashboard
-    },
-    {
-      path: '/user/list',
-      name: 'List',
-      component: List
-    },
-    {
-      path: '/user/report',
-      name: 'Report',
-      component: Report
+      path: '/user',
+      component: User,
+      children: [
+        {
+          path: '',
+          component: Dashboard
+        },
+        {
+          path: 'dashboard',
+          component: Dashboard
+        },
+        {
+          path: 'usermanage',
+          component: Usermanage
+        },
+        {
+          path: 'recordmanage',
+          component: Recordmanage
+        },
+        {
+          path: 'adduser',
+          component: Adduser
+        }
+      ]
     }
   ]
 })

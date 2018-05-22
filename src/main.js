@@ -8,6 +8,8 @@ import Axios from 'axios'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
+import store from './store'
+
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
@@ -31,10 +33,29 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+Axios.interceptors.request.use(
+  function (config) {
+    store.dispatch('showLoading')
+    return config
+  }, function (error) {
+    return Promise.reject(error)
+  }
+)
+
+Axios.interceptors.response.use(
+  function (response) {
+    store.dispatch('hideLoading')
+    return response
+  }, function (error) {
+    return Promise.reject(error)
+  }
+)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

@@ -19,6 +19,8 @@
 </template>
 
 <script type="text/javascript">
+import { userLogin } from '@/api/user'
+
 export default {
   data () {
     return {
@@ -32,18 +34,18 @@ export default {
         name: this.account,
         password: this.password
       }
-      this.$http.post('auth/user/login', obj)
+      userLogin(obj)
         .then(
           (res) => {
-            if (res.data.success) {
-              sessionStorage.setItem('demo-token', res.data.token)
+            if (res.success) {
+              sessionStorage.setItem('demo-token', res.token)
               this.$message({
                 type: 'success',
                 message: '登录成功'
               })
               this.$router.push('/user/dashboard')
             } else {
-              this.$message.error(res.data.info)
+              this.$message.error(res.info)
               sessionStorage.setItem('demo-token', null)
             }
           }, (err) => {
@@ -57,16 +59,16 @@ export default {
         name: this.account,
         password: this.password
       }
-      this.$http.post('auth/user/register', obj)
+      userLogin(obj)
         .then(
           (res) => {
-            if (res.data.success) {
+            if (res.success) {
               this.$message({
                 type: 'success',
                 message: '注册成功'
               })
             } else {
-              this.$message.error(res.data.message)
+              this.$message.error(res.message)
             }
           }, (err) => {
             this.$message.error(err.stack)

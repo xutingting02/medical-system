@@ -4,22 +4,22 @@
     <Header></Header>
   </el-header>
   <el-main>
-    <p>report</p>
+    <router-view />
   </el-main>
+  <el-footer>
+    <Footer></Footer>
+  </el-footer>
 </el-container>
 </template>
 
 <script type="text/javascript">
-import Header from './Header.vue'
+import Header from '@/components/Header.vue'
+import Footer from '@/components/Footer.vue'
 
 export default {
   components: {
-    Header
-  },
-  data () {
-    return {
-      activeIndex: '/user/Report'
-    }
+    Header,
+    Footer
   }
 }
 </script>
