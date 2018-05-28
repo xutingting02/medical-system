@@ -21,4 +21,9 @@ module.exports = function (app) {
     var json = util.getJsonFile('./addUser.json');
     res.json(Mock.mock(json))
   });
+
+  app.post('/user/delete', function (req, res) {
+    var json = util.getJsonFile('./deleteUser.json');
+    res.json(Mock.mock(json))
+  });
 };

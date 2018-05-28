@@ -28,7 +28,7 @@ export default {
         {
           id: '2',
           path: '',
-          name: '记录表'
+          name: '就诊记录列表'
         }
       ]
     }

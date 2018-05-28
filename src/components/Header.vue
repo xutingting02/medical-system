@@ -8,7 +8,6 @@
     <el-menu-item index="/user/dashboard">首页</el-menu-item>
     <el-menu-item index="/user/usermanage">用户管理</el-menu-item>
     <el-menu-item index="/user/recordmanage">就诊记录</el-menu-item>
-    <el-menu-item index="/user/tool">工具</el-menu-item>
   </el-menu>
 </div>
 </template>

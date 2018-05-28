@@ -19,7 +19,7 @@
 </template>
 
 <script type="text/javascript">
-import { userLogin } from '@/api/user'
+import { userLogin, userRegister } from '@/api/user'
 
 export default {
   data () {
@@ -59,7 +59,7 @@ export default {
         name: this.account,
         password: this.password
       }
-      userLogin(obj)
+      userRegister(obj)
         .then(
           (res) => {
             if (res.success) {

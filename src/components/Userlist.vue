@@ -21,7 +21,7 @@
             <el-option label="家庭地址" value="address"></el-option>
             <el-option label="联系方式" value="phone"></el-option>
           </el-select>
-          <el-button slot="append" icon="el-icon-search" @click="fetchList"></el-button>
+          <el-button slot="append" icon="el-icon-search" @click="refreshList"></el-button>
         </el-input>
       </div>
     </el-col>
@@ -31,13 +31,14 @@
       <el-button type="primary" icon="el-icon-plus" @click="addUserCard">新建病历</el-button>
     </el-col>
     <el-col :span="21" class="batch-group">
-      <el-button size="mini">删除</el-button>
+      <el-button size="mini" @click="batchDelete">删除</el-button>
     </el-col>
   </el-row>
   <el-table
     :data="tableData"
     stripe
-    style="width: 100%">
+    style="width: 100%"
+    @selection-change="selectionChange">
     <el-table-column
       type="selection"
       width="55">
@@ -77,10 +78,22 @@
   <el-row class="row-group">
     <el-pagination
       background
+      :current-page.sync="page"
+      @current-change="pageChange"
       layout="prev, pager, next"
-      :total="1000">
+      :total="totalSize">
     </el-pagination>
   </el-row>
+  <el-dialog
+    title="提示"
+    :visible.sync="dialogVisible"
+    width="30%">
+    <span>操作会同时删除该用户的所有就诊记录，确认删除？</span>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="deleteUserOk">确 定</el-button>
+    </span>
+  </el-dialog>
 </div>
 </template>
 
@@ -100,7 +113,8 @@
 </style>
 
 <script type="text/javascript">
-import { getUserList } from '@/api/user'
+import { getUserList, deleteUser } from '@/api/user'
+import { forEach } from 'lodash'
 export default {
   data () {
     return {
@@ -121,7 +135,11 @@ export default {
           value: '2'
         }
       ],
-      tableData: []
+      tableData: [],
+      dialogVisible: false,
+      selectedId: [],
+      totalSize: 0,
+      page: 0
     }
   },
   methods: {
@@ -129,32 +147,60 @@ export default {
       this.$router.push('/user/recordmanage?id=' + row.id)
     },
     handleEdit: function (index, row) {
-      // body...
+      this.$router.push('/user/adduser?id=' + row.id)
     },
     handleDelete: function (index, row) {
-
+      // 弹窗确认是否删除
+      this.dialogVisible = true
+      this.selectedId = [row.id]
+    },
+    deleteUserOk: function () {
+      this.dialogVisible = false
+      deleteUser({
+        id: this.selectedId.join('|')
+      }).then(res => {
+        this.refreshList()
+      })
     },
     addUserCard: function () {
       this.$router.push('/user/adduser')
     },
-    fetchList: function () {
+    refreshList: function () {
       let params = {
         keyword: this.keyword,
         keywordType: this.keywordType,
-        sex: this.sex
+        sex: this.sex,
+        page: this.page
       }
       getUserList(params).then((res) => {
         this.tableData = res.data
+        this.totalSize = res.totalSize
       })
+    },
+    selectionChange: function (selection) {
+      // selection为对象数组
+      let selectedIds = []
+      forEach(selection, function (item) {
+        selectedIds.push(item.id)
+      })
+      this.selectedId = selectedIds
+    },
+    // 批量删除
+    batchDelete: function () {
+      this.dialogVisible = true
+    },
+    pageChange: function () {
+      // 刷新table
+      this.refreshList()
     }
   },
   watch: {
     sex: function () {
-      this.fetchList()
+      this.refreshList()
     }
   },
   created () {
-    this.fetchList()
+    this.refreshList()
   }
 }
 </script>

@@ -16,6 +16,7 @@ Vue.use(ElementUI)
 
 Vue.prototype.$http = Axios
 
+// 登录权限校验
 router.beforeEach((to, from, next) => {
   const token = sessionStorage.getItem('demo-token')
   if (to.path === '/') { // 如果是跳转到登录页的
@@ -33,6 +34,7 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+// 所有的请求都会显示loading
 Axios.interceptors.request.use(
   function (config) {
     store.dispatch('showLoading')
@@ -42,6 +44,7 @@ Axios.interceptors.request.use(
   }
 )
 
+// 请求结束隐藏loading
 Axios.interceptors.response.use(
   function (response) {
     store.dispatch('hideLoading')

@@ -28,7 +28,7 @@ export default {
         {
           id: '2',
           path: '',
-          name: '用户表'
+          name: '用户列表'
         }
       ]
     }
